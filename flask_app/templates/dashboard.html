@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+
+<body>
+
+    <div class='container register-bg p-5 border border-dark'>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border border-dark">
+            <a class="navbar-brand h3" href="/dashboard">Welcome {{user.first_name}}!</a>
+            <div class="form-inline my-2 my-lg-0">
+                <a href="/new/recipe" class="btn btn-primary mr-3">Add New
+                    Recipe</a>
+                <a href="/logout" class="btn btn-info">Logout</a>
+                </div>
+        </nav>
+        <!-- seperate the content section as well as custom background per section -->
+        <div class="container login-bg p-3 border border-dark">
+            <p class="wht-sh">Check out these recipes!</p>
+            
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Under 30 Minutes?</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recipe in recipes %}
+                    <tr>
+                        <!-- many to many display likes or unlike -->
+                        | <a href="/add/like/{{recipe.id}}">Like</a>
+                        | <a href="/delete/like/{{recipe.id}}">Unlike</a>
+
+                        <th scope="row">{{recipe.name}}</th>
+                        {% if recipe.under_30_minutes == 1 %}
+                        <td>Yes</td>
+                        {% else %}
+                        <td>No</td>
+                        {% endif %}
+                        <td>
+                            <a href="/recipe/{{recipe.id}}">View Instructions</a>
+                            {% if recipe.user_id == user.id %}
+                            <a href="/edit/recipe/{{recipe.id}}">Edit</a>
+                            <a href="/destroy/recipe/{{recipe.id}}">Delete</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </body>
+</html>
